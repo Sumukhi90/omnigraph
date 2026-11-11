@@ -1,0 +1,2 @@
+{"type":"Source","data":{"slug":"beta-finding","title":"Synthetic finding from worker beta"}}
+{"edge":"Supports","from":"beta-finding","to":"lower-latency"}

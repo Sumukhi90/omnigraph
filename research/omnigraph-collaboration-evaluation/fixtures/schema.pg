@@ -1,0 +1,11 @@
+node Source {
+  slug: String @key
+  title: String
+}
+
+node Claim {
+  slug: String @key
+  statement: String
+}
+
+edge Supports: Source -> Claim

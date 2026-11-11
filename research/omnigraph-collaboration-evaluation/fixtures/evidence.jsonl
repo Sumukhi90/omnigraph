@@ -1,0 +1,5 @@
+{"type":"Claim","data":{"slug":"lower-latency","statement":"The synthetic migration reduced request latency."}}
+{"type":"Source","data":{"slug":"benchmark-a","title":"Synthetic benchmark A"}}
+{"type":"Source","data":{"slug":"benchmark-b","title":"Synthetic benchmark B"}}
+{"edge":"Supports","from":"benchmark-a","to":"lower-latency"}
+{"edge":"Supports","from":"benchmark-b","to":"lower-latency"}

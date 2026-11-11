@@ -1,0 +1,8 @@
+version: 1
+targets:
+  local_poc:
+    kind: server
+    endpoint: http://127.0.0.1:18080
+    default_graph: research
+    auth:
+      provider: anonymous

@@ -1,0 +1,7 @@
+version: 1
+metadata:
+  name: flolabs-local-poc
+graphs:
+  research:
+    schema: schema.pg
+    queries: queries/

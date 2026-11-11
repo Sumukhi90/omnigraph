@@ -1,0 +1,9 @@
+query sources_for_claim($claim: String) {
+  match {
+    $source: Source
+    $claim_node: Claim { slug: $claim }
+    $source supports $claim_node
+  }
+  return { $source.title as source }
+  order { source asc }
+}
