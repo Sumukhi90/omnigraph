@@ -147,6 +147,59 @@ truth. These are test expectations, not observed engine behavior.
 - Main snapshot/query before and after every write/merge attempt.
 - Failure responses and proof that a rejected or conflicted operation did not
   move main.
+- For concurrent calls: synchronized start marker, independent authenticated
+  client/session IDs, request and operation IDs, response ordering, and each
+  branch/graph commit before and after the race.
+- For a dropped response: transport fault point, durable commit lookup, and
+  evidence that no blind replay duplicated the operation.
+
+## Additional required scenarios — simulated test designs
+
+The following cases extend the original sketches to cover missing conflict
+and concurrency dimensions. They are proposed cases, not additional measured
+results. The current `Source`/`Claim`/`Supports` fixture cannot express all of
+them; use a disposable schema with the needed entity and edge properties.
+
+### Scenario D — different properties on the same entity
+
+Start two sibling branches from one baseline `Finding`. Alpha changes its
+`confidence`; Beta changes its `status`; neither changes the other's field.
+Capture complete entity rows and run a merge dry-run. The implementation's
+three-way classifier compares a logical entity row, so the test must establish
+whether these distinct property edits produce `divergent_update`; it must not
+assume property-wise merging. On any conflict, verify that `main` remains at
+the recorded baseline and preserve both branch values for human resolution.
+
+### Scenario E — conflicting updates to one relationship
+
+Use a proposed test schema with a stable edge identity and a mutable edge
+property, such as a keyed `Supports` relationship with a `note`. Alpha and Beta
+change the same relationship's `note` to incompatible synthetic values from
+the same base. Verify the merge result names the edge type and key, and that a
+dry-run or refused merge leaves the target unchanged. This requires validating
+the proposed edge-key schema before execution; it is not represented by the
+current fixture, whose `Supports` edge has no properties or key.
+
+### Scenario F — relationship addition versus endpoint deletion
+
+From the same base, Alpha deletes a synthetic source node while Beta adds a
+relationship that uses that source. Preview the merge and inspect the graph
+head. The acceptance criterion is an explicit `orphan_edge` refusal with no
+partial publication. This tests an add/delete interaction at the graph
+constraint boundary; it does not by itself model two requests executing at
+the same wall-clock instant.
+
+### Scenario G — concurrent client requests and response loss
+
+After branches and the server are qualified, launch two independent MCP host
+sessions behind a synchronization barrier. First submit writes to their
+separate task branches and verify isolation. In a separate run, submit
+incompatible updates to the same branch/entity and record whether the server
+serializes or explicitly refuses one. A refusal or unknown outcome must be
+reconciled from snapshots and operation receipts before retry. Add a controlled
+response-drop run to verify that a committed write is discovered without
+blindly replaying it. Protocol clients count as client-concurrency evidence;
+only two independently operating AI sessions count as a multi-agent result.
 
 Use the expanded [collaboration test matrix](./TEST_RESULTS.md) for pass
 criteria. No result in this simulation can substitute for those artifacts.

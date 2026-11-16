@@ -39,7 +39,7 @@ No Notion page was opened or updated for this assignment.
 
 The existing execution results remain unchanged: branch creation, cluster
 deployment, MCP, and two-agent collaboration are still blocked/unverified.
-The submission now includes a detailed ten-test matrix, a separate
+At that stage, the submission included the original ten-test matrix, a separate
 fictional two-agent scenario document with expected retrieval shapes,
 expanded alternatives and MCP guidance, a team operating procedure, and a
 presentation outline plus read-only demo script for the reviewer. These are plans and
@@ -64,3 +64,22 @@ edit was performed for this update.
 
 The roles above are a plan only. The current run did not execute a two-agent
 session because branch creation and server/MCP setup were blocked.
+
+## Coverage audit update — 2026-11-16
+
+The follow-up audit found that the original matrix did not separately specify
+different-property edits to one entity, conflicting updates to a keyed edge,
+relationship-add versus endpoint-delete, concurrent client writes, or
+response-loss recovery. The test matrix and simulated scenario document now
+include these cases as **not executed** acceptance tests. The cluster fixture
+now points to its included `queries.gq` file so the declared source exists.
+No live branch, server, MCP, concurrent-client, or multi-agent test was run in
+this update.
+
+### Validation executed during this review
+
+- `omnigraph cluster validate --config research/omnigraph-collaboration-evaluation/fixtures` — **PASS**; config valid, 3 resources and 3 dependency edges. The CLI emitted the expected external-Blob default-deny warning.
+- PowerShell static fixture check — **PASS**; parsed all 3 JSONL fixtures and `params.json`, resolved 4 relationship endpoints, and confirmed the cluster schema/query paths exist.
+- Local Markdown link-target check — **PASS** for all 19 research Markdown files; `git diff --check` reported no whitespace errors.
+- Attempted a fresh local graph initialization in a unique `%TEMP%` directory — **BLOCKED** before graph creation with `target_config_invalid: Access is denied. (os error 5)`. A read-only check found no `graph.omni` output; no branch write was issued.
+- `cargo test -p omnigraph-engine --test integration branching::` — **NOT RUN**; PowerShell could not find `cargo`. Rust integration and failpoint suites therefore remain unverified in this environment.

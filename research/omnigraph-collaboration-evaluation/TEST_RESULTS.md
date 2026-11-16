@@ -10,7 +10,7 @@ The expanded scenario sketches in
 are planning material only; none of their branch, conflict, or post-review
 results were executed.
 
-## Ten-test collaboration matrix
+## Core ten-test collaboration matrix
 
 | ID | Test objective | Prerequisites | Steps (future run on a fresh disposable graph) | Expected outcome | Actual status and evidence | Evidence required to mark PASS |
 |---|---|---|---|---|---|---|
@@ -31,8 +31,33 @@ results were executed.
   read-only/configuration checks, not collaboration tests.
 - **Executed and failed:** P6/P7 branch-create attempts and P9 cluster plan.
   Their errors are preserved below; these rows are not instructions to retry.
-- **Blocked:** P11 and all T1–T10 objectives. A successful basic query does not
+- **Blocked:** P11/P12 and all T1–T16 objectives. A successful basic query does not
   establish branch, server, MCP, or multi-agent behavior.
+
+## Additional acceptance cases for concurrency and conflict coverage
+
+These six cases close coverage gaps in the initial matrix. They are test
+designs only; none has been executed. Any required schema additions belong in a
+fresh disposable fixture and must be validated against the installed release.
+In particular, the current `fixtures/schema.pg` has no provenance fields or
+properties on `Supports`, so it cannot express all cases below without a
+proposed test schema.
+
+| ID | Test objective | Steps | Expected outcome to verify | Actual status |
+|---|---|---|---|---|
+| T11 | Two agents update different properties of the same entity. | From one base, create sibling branches; Agent A changes one property and Agent B changes a different property on the same keyed entity; capture both snapshots and run merge dry-run. | Determine and record whether the entity-level three-way merge reports `divergent_update`; the target must not move on conflict. Do not assume independent property edits auto-merge. | **BLOCKED.** No branches or writes. |
+| T12 | Two agents update the same keyed relationship differently. | In a disposable schema, add a stable edge key and an edge property; update that property to different values on sibling branches; inspect branch diffs and dry-run merge. | Verify the typed edge conflict and exact edge identity in the conflict response, and prove the target snapshot is unchanged. | **BLOCKED.** The current fixture edge has no key or property; this requires a proposed schema and live run. |
+| T13 | One agent deletes an endpoint while another adds a relationship that needs it. | From one baseline, delete a node on one branch and add an edge to it on the other; dry-run and inspect target state. | Verify an explicit `orphan_edge` conflict and no target publication. | **BLOCKED.** The scenario is not in the evaluation run; repository integration tests cover a related engine-level case, not this live-agent workflow. |
+| T14 | Two independent clients write concurrently to separate agent branches. | Pre-create sibling branches from one captured base; use two independently identified MCP host sessions and a barrier to submit distinct synthetic writes concurrently; capture receipts and query both branches plus `main`. | Both accepted writes remain on their intended branch, neither leaks to the sibling or `main`, and commit lineage is coherent. Any refusal must be explicit and reconciled before retry. | **BLOCKED.** No server, MCP clients, branches, or concurrent requests. |
+| T15 | Two independent clients race writes against the same branch/entity. | Use two authenticated clients and a synchronization barrier to submit incompatible updates from the same captured branch snapshot; record request IDs, outcomes, receipts, and before/after snapshots. | The race must serialize or refuse with an explicit conflict; no acknowledged update may be silently lost, and a refused/unknown outcome must leave enough evidence to reconcile safely. | **BLOCKED.** No server, credentials, or in-flight client race. |
+| T16 | Recover after a client loses the response to a committed or ambiguous write. | On a disposable environment, use a controlled proxy/fault hook to drop the response around publication; inspect operation/commit history and graph state before any retry. | Distinguish committed, definitely-not-committed, and unknown outcomes; recover without duplicate effects or blind replay, then verify the final snapshot and query. | **BLOCKED.** No fault-injected client/server run or recovery was performed. |
+
+The engine source classifies three-way changes per logical entity row, and the
+merge guide documents `divergent_update`, `delete_vs_update`, and `orphan_edge`.
+That is design context for the expectations above, not evidence that this
+assignment's agent/MCP paths passed. The repository's own Rust integration and
+failpoint tests are separate engine-level evidence and have not been run in
+this session.
 
 ## Executed setup and diagnostic checks
 
@@ -91,5 +116,5 @@ No already available compatible Linux x86_64 environment was found. The
 read-only WSL probe did not start within the 30-second bound; it was stopped
 without changing WSL settings or installing anything. Consequently no fresh
 graph copy, branch, merge, conflict, server, MCP, or two-agent test was
-attempted. T1–T10 remain **BLOCKED**; the scenarios document is
+attempted. T1–T16 remain **BLOCKED**; the scenarios document is
 **SIMULATED** only.

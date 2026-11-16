@@ -176,7 +176,7 @@ Do not live-run a branch write against the protected original graph.
 The following submission files add plans and simulations without changing the
 execution record above:
 
-- [Expanded ten-test matrix](./TEST_RESULTS.md) — all collaboration cases
+- [Expanded sixteen-case matrix](./TEST_RESULTS.md) — all collaboration cases
   remain blocked; the setup checks retain their original observed outcomes.
 - [Simulated two-agent scenarios](./SIMULATED_COLLABORATION_SCENARIOS.md) —
   fictional records and expected retrieval only, not executed.

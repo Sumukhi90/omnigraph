@@ -4,4 +4,4 @@ metadata:
 graphs:
   research:
     schema: schema.pg
-    queries: queries/
+    queries: queries.gq

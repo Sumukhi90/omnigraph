@@ -29,7 +29,7 @@ does not establish an operational advantage over those alternatives.
 1. Use a platform and storage configuration where Omnigraph 0.15.0 branch
    creation and local cluster operations are confirmed to work.
 2. Keep the experiment in a disposable graph with synthetic records.
-3. Execute the ten tests in [TEST_RESULTS.md](./TEST_RESULTS.md), beginning
+3. Execute all sixteen cases in [TEST_RESULTS.md](./TEST_RESULTS.md), beginning
    with two branches from one baseline and read-only verification before each
    write/merge.
 4. Configure server-side least-privilege policy and a test-only identity.
@@ -72,7 +72,7 @@ concise demonstration plan for the reviewer.
 | **Verified in this environment** | Official Omnigraph 0.15.0 Windows install/version; local synthetic graph initialization and five-record load; typed query returns two expected rows; read-only snapshot/list after branch errors shows only `main` and manifest version 2; latest read-only baseline verifier passed; source checkout remained clean at the recorded commit. |
 | **Documented, not verified here** | Omnigraph's graph branch/diff/merge workflow, merge-conflict handling, server-side policy, cluster-backed HTTP/MCP service, and `omnigraph mcp` stdio bridge. Documentation is not execution evidence. |
 | **Simulated/test-design only** | Two agents' distinct findings, branch-specific retrieval, contradictory edits, reviewer conflict resolution, and expected before/after query rows in [SIMULATED_COLLABORATION_SCENARIOS.md](./SIMULATED_COLLABORATION_SCENARIOS.md). These are invented examples, not graph records or results. |
-| **Blocked or unverified** | Windows graph branch creation and local cluster plan; all ten collaboration objectives; actual graph merge/conflict/recovery; access-policy enforcement; MCP handshake/tool listing/query; Copilot connection; two independent live agents; comparison benchmarks for Git, LangGraph, Letta, or Mem0. |
+| **Blocked or unverified** | Windows graph branch creation and local cluster plan; all sixteen collaboration objectives; actual graph merge/conflict/recovery; access-policy enforcement; MCP handshake/tool listing/query; Copilot connection; two independent live agents; comparison benchmarks for Git, LangGraph, Letta, or Mem0. |
 
 ## Decision
 

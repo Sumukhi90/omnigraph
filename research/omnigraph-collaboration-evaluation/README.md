@@ -30,7 +30,7 @@ unconfirmed. WSL startup still times out. The additive
 [second-stage recovery report](./SECOND_STAGE_RECOVERY.md) records the source
 evidence, MCP/client status, preservation check, and next-step requirements.
 Follow-up planning now includes a fully expanded but still blocked
-[ten-test matrix](./TEST_RESULTS.md), explicitly simulated
+[sixteen-case matrix](./TEST_RESULTS.md), explicitly simulated
 [two-agent scenarios](./SIMULATED_COLLABORATION_SCENARIOS.md), a broader
 [alternatives comparison](./COMPARISON.md), an [MCP architecture and
 validation checklist](./MCP_RESULTS.md), and updated
