@@ -188,6 +188,33 @@ and approval to install the release binary there; a secure isolated cluster,
 test-only credential mechanism, and compatible MCP host must then be
 configured and tested. Configuration validation alone remains insufficient.
 
+## Separate npm MCP package compatibility check — 2026-11-16
+
+The user prompt names `@modernrelay/omnigraph-mcp`. The official
+[`ModernRelay/omnigraph-ts` README](https://github.com/ModernRelay/omnigraph-ts#server-version-pin)
+identifies this as the stdio MCP host bridge wrapping the TypeScript SDK. It
+also states that the v0.14 package line targets Omnigraph Server v0.14.0 and
+that the CLI, server, and client integrations should be upgraded together.
+The public npm page search result showed `@modernrelay/omnigraph` 0.14.0; the
+package page itself returned HTTP 403 to this research session, so the current
+published version of the MCP package was not independently confirmed.
+
+This evaluation's installed CLI was Omnigraph 0.15.0. The package's documented
+v0.14 target therefore does not establish compatibility with the evaluated
+server. No `npm install`, package configuration, or package MCP request was
+performed. Installing a client whose server-version compatibility is
+unconfirmed would not provide valid MCP evidence. The official package is a
+separate option from the server's built-in `/mcp` endpoint and the
+`omnigraph mcp` CLI bridge; all three still require an appropriate running
+server/target. Package-specific installation and live tests remain **NOT
+TESTED**.
+
+The official upstream installation script was also inspected without
+execution. It selects Linux x86_64 or arm64 assets, downloads an archive and
+SHA-256 file, checks the digest, and supports GitHub build-attestation
+verification when `gh` is installed and authenticated. That review did not
+install or verify a binary in this session.
+
 ## Sources
 
 - [Omnigraph v0.15.0 MCP guide](https://github.com/ModernRelay/omnigraph/blob/v0.15.0/docs/user/operations/mcp.md)
